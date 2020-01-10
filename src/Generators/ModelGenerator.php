@@ -39,7 +39,7 @@ class ModelGenerator implements Generator
 
     protected function populateStub(string $stub, Model $model)
     {
-        $stub = str_replace('DummyNamespace', 'App', $stub);
+        $stub = str_replace('DummyNamespace', $model->fullyQualifiedNamespace(), $stub);
         $stub = str_replace('DummyClass', $model->name(), $stub);
 
         $body = $this->buildProperties($model);
@@ -106,7 +106,9 @@ class ModelGenerator implements Generator
 
     protected function getPath(Model $model)
     {
-        return 'app/' . $model->name() . '.php';
+        $path = implode('/', array_slice(explode('\\', $model->fullyQualifiedClassName()), 1));
+
+        return config('blueprint.app_path') . '/' . $path . '.php';
     }
 
     private function fillableColumns(array $columns)

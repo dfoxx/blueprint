@@ -60,7 +60,7 @@ class JobGenerator implements Generator
 
     protected function populateStub(string $stub, DispatchStatement $dispatchStatement)
     {
-        $stub = str_replace('DummyNamespace', 'App\\Jobs', $stub);
+        $stub = str_replace('DummyNamespace', config('blueprint.namespace') . '\\Jobs', $stub);
         $stub = str_replace('DummyClass', $dispatchStatement->job(), $stub);
         $stub = str_replace('// properties...', $this->buildConstructor($dispatchStatement), $stub);
 

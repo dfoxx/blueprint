@@ -64,7 +64,7 @@ class EventGenerator implements Generator
 
     protected function populateStub(string $stub, FireStatement $fireStatement)
     {
-        $stub = str_replace('DummyNamespace', 'App\\Events', $stub);
+        $stub = str_replace('DummyNamespace', config('blueprint.namespace') . '\\Events', $stub);
         $stub = str_replace('DummyClass', $fireStatement->event(), $stub);
         $stub = str_replace('// properties...', $this->buildConstructor($fireStatement), $stub);
 

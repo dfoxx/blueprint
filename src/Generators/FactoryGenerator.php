@@ -45,7 +45,7 @@ class FactoryGenerator implements Generator
 
     protected function populateStub(string $stub, Model $model)
     {
-        $stub = str_replace('DummyNamespace', 'App', $stub);
+        $stub = str_replace('DummyNamespace', config('blueprint.namespace'), $stub);
         $stub = str_replace('DummyClass', $model->name(), $stub);
         $stub = str_replace('// definition...', $this->buildDefinition($model), $stub);
 

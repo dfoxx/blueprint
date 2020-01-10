@@ -126,4 +126,30 @@ class FormRequestGeneratorTest extends TestCase
 
         $this->assertEquals([], $this->subject->output($tree));
     }
+
+    /**
+     * @test
+     */
+    public function output_supports_nested_form_requests()
+    {
+        $this->files->expects('get')
+            ->with('stubs/form-request.stub')
+            ->andReturn(file_get_contents('stubs/form-request.stub'));
+
+        $this->files->expects('exists')
+            ->with('app/Http/Requests/Admin')
+            ->andReturns(false);
+        $this->files->expects('exists')
+            ->with('app/Http/Requests/Admin/UserStoreRequest.php')
+            ->andReturnFalse();
+        $this->files->expects('makeDirectory')
+            ->with('app/Http/Requests/Admin');
+        $this->files->expects('put')
+            ->with('app/Http/Requests/AdminUserStoreRequest.php', $this->fixture('form-requests/nested-components.php'));
+
+        $tokens = $this->blueprint->parse($this->fixture('definitions/nested-components.bp'));
+        $tree = $this->blueprint->analyze($tokens);
+
+        $this->assertEquals(['created' => ['app/Http/Requests/Admin/UserIndexRequest.php']], $this->subject->output($tree));
+    }
 }
